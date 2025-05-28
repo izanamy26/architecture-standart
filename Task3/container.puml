@@ -1,0 +1,37 @@
+@startuml
+title "Диаграмма контейнеров"
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь")
+
+System(site, "Сайт", "PHP, React.js")
+System(bank, "Интерент-банкинг", "ASP.NET")
+System(call, "Call-center", "React.js, Java Spring Boot")
+System(abc, "АБС", "Delphi")
+System(sms, "SMS-уведомления")
+
+SystemQueue(kafka, "Kafka")
+ContainerDb(bdAbc, "БД АБС", "Oracle")
+ContainerDb(callAbc, "БД кол-цетра", "PostgreSQL")
+ContainerDb(bankAbc, "БД интернет-банкинга", "MySQL")
+
+Rel(user, bank, "Взаимодействие пользователя с приложением", "HTTPS")
+Rel(site, call, "Передача заявки в кол-центр", "HTTPS")
+Rel(user, site, "Взаимодействие пользователя с сайтом", "HTTPS")
+Rel(sms, user, "Передача уведомлений пользователю", "HTTPS")
+
+Rel(kafka, abc, "Получение заявок")
+Rel(abc, kafka, "Передача результатов")
+
+Rel(call, kafka, "Передача заявок в Кафку")
+Rel(bank, kafka, "Передача заявок в Кафку")
+Rel(kafka, sms, "Передача уведомлений")
+
+Rel(abc, bdAbc, "Запись/чтение данных")
+Rel(call, callAbc, "Запись/чтение данных")
+Rel(bank, bankAbc, "Запись/чтение данных")
+
+@enduml

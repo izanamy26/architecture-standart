@@ -1,0 +1,41 @@
+@startuml
+title "Диаграмма контейнеров ставок"
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь")
+Person(manager, "Менеджер кол-центра")
+Person(managerCall, "Менеджер партнерскго кол-центра")
+
+System(site, "Сайт", "PHP, React.js")
+System(bank, "Интерент-банкинг", "ASP.NET")
+System(call, "Call-center", "React.js, Java Spring Boot")
+System(abc, "АБС", "Delphi")
+System(callPartner, "Партнерский Call-center")
+
+Container(sftp, "SFTP-сервер")
+
+ContainerDb(bdAbc, "БД АБС", "Oracle")
+ContainerDb(callAbc, "БД кол-цетра", "PostgreSQL")
+ContainerDb(bankAbc, "БД интернет-банкинга", "MySQL")
+
+Rel(manager, call, "Взимедействие менеджера кол-центра с системой")
+Rel(managerCall, callPartner, "Взимедействие менеджера партнерского кол-центра с системой")
+Rel(user, bank, "Взаимодействие пользователя с приложением", "HTTPS")
+Rel(site, abc, "Получение ставок", "HTTPS")
+Rel(bank, abc, "Получение ставок", "HTTPS")
+Rel(user, site, "Взаимодействие пользователя с сайтом", "HTTPS")
+
+
+Rel(abc, sftp, "Загрузка ставок", "SFTP")
+Rel(sftp, callPartner, "Получение ставок", "SFTP")
+
+Rel(call, abc, "Получение ставок")
+
+Rel(abc, bdAbc, "Запись/чтение данных")
+Rel(call, callAbc, "Запись/чтение данных")
+Rel(bank, bankAbc, "Запись/чтение данных")
+
+@enduml
