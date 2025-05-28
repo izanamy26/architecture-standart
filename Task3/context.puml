@@ -1,0 +1,26 @@
+@startuml
+title "Диаграмма контекстов"
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь")
+
+System(site, "Сайт", "PHP, React.js")
+System(bank, "Интерент-банкинг", "ASP.NET")
+System(call, "Call-center", "React.js, Java Spring Boot")
+System(abc, "АБС", "Delphi")
+System(sms, "SMS-уведомления")
+
+Rel(user, bank, "Взаимодействие пользователя с приложением", "HTTPS")
+Rel(site, call, "Передача заявки в кол-центр", "HTTPS")
+Rel(user, site, "Взаимодействие пользователя с сайтом", "HTTPS")
+Rel(sms, user, "Передача уведомлений пользователю", "HTTPS")
+
+Rel(call, abc, "Получение заявок")
+
+Rel(bank, abc, "Передача заявок в Кафку")
+Rel(abc, sms, "Передача уведомлений")
+
+@enduml
